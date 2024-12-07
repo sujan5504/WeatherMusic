@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather-Based Music Recommendation</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <!-- Navigation Bar -->
+        <nav>
+            <div class="nav-container">
+                <h1 class="logo">Weather Music</h1>
+                <ul class="nav-links">
+                    <li><a href="#">About</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    
+        <div class="header-image">
+            <h2>Weather-Based Music Recommendation</h2>
+            <p>Enter your city to discover music recommendations based on the current weather!</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Left Column: Search & Weather Details -->
+            <div class="left-column">
+                <form action="/recommend" method="post">
+                    <label for="city">Enter your city:</label>
+                    <input type="text" id="city" name="city" placeholder="e.g., New York, London" required>
+                    <button type="submit">Get Recommendations</button>
+                </form>
+
+                {% if error %}
+                <p class="error">{{ error }}</p>
+                {% endif %}
+
+                {% if weather %}
+                <div class="weather-details">
+                    <h2>Weather in {{ city }}:</h2>
+                    <p>Condition: {{ weather }} ({{ temp }}°C)</p>
+                    <p>Humidity: {{ humidity }}%</p>
+                    <p>Wind Speed: {{ wind_speed }} km/h</p>
+                </div>
+                {% endif %}
+            </div>
+            
+
+            <!-- Right Column: Music Recommendations -->
+            <div class="right-column">
+                {% if songs %}
+                <div class="results">
+                    <h2>Detected Mood: {{ mood }}</h2>
+                    <h3>Recommended Songs:</h3>
+                    <ul class="song-list">
+                        {% for song in songs %}
+                        <li>
+                            <img src="{{ song.thumbnail }}" alt="{{ song.name }} thumbnail" class="song-thumbnail">
+                            <a href="{{ song.url }}" target="_blank">{{ song.name }}</a> by {{ song.artist }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Music Recommendation. Powered by Spotify and OpenWeatherMap.</p>
+        </div>
+    </footer>
+</body>
+</html>
